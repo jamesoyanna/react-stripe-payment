@@ -6,9 +6,31 @@ import StripeCheckout from 'react-stripe-checkout'
 function App() {
  const [product, setProduct] = useState({
    name: "Digital Wealth Book",
-   price: 10,
+   price: 20,
    productBy: "J.J Omojuwa"
  })
+
+ const makePayment = token =>{
+   const body = {
+     token,
+     product
+   }
+   const headers = {
+     "Content-type": "application/json"
+   }
+
+   return fetch(`http://localhost:2000/payment`,{
+     method: "POST",
+     headers,
+     body: JSON.stringify(body)
+   })
+   .then(response =>{
+     console.log("RESPONSE", response )
+     const {status} = response;
+     console.log("STATUS", status)
+   })
+   .catch(error => console.log(error))
+ }
 
   return (
     <div className="App">
@@ -17,9 +39,16 @@ function App() {
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-       <StripeCheckout stripeKey="" token="" name="Buy Digital Wealth Book">
-         <button className="btn btn-large blue">Buy Digital Wealth Book</button>
-       </StripeCheckout>
+        <StripeCheckout
+          stripeKey=""
+          token={makePayment}
+          name="Buy Digital Wealth Book"
+          amount={product.price * 100}
+        >
+          <button className="btn btn-large blue">
+            Buy Digital Wealth Book for ${product.price}
+          </button>
+        </StripeCheckout>
       </header>
     </div>
   );
