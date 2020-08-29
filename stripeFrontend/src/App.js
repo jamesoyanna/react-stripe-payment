@@ -40,7 +40,7 @@ function App() {
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <StripeCheckout
-          stripeKey=""
+          stripeKey="public_key_here"
           token={makePayment}
           name="Buy Digital Wealth Book"
           amount={product.price * 100}
